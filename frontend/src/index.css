@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* GLOBAL MOBILE IMPROVEMENTS */
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth scrolling on iOS */
+.overflow-y-auto,
+.overflow-y-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* hide stream toast */
+.str-chat__list-notifications {
+  display: none;
+}
+
+/* STREAM CHAT FULL THEME FIX */
+
+.str-chat {
+  background: transparent !important;
+}
+
+.str-chat__container {
+  background: transparent !important;
+}
+
+.str-chat__main-panel {
+  background: transparent !important;
+}
+
+.str-chat__channel {
+  background: transparent !important;
+}
+
+.str-chat__message-list {
+  background: transparent !important;
+}
+
+.str-chat__ul {
+  background: transparent !important;
+}
+
+/* HEADER */
+
+.str-chat__channel-header {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Truncate channel name on small screens */
+.str-chat__channel-header-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+@media (min-width: 480px) {
+  .str-chat__channel-header-title {
+    max-width: 220px;
+  }
+}
+
+@media (min-width: 768px) {
+  .str-chat__channel-header-title {
+    max-width: none;
+  }
+}
+
+/* INPUT */
+
+.str-chat__message-input {
+  background: transparent !important;
+  border: none !important;
+}
+
+.str-chat__message-input-inner {
+  background: transparent !important;
+}
+
+/* REMOVE DEFAULT SHADOWS */
+
+.str-chat__container * {
+  box-shadow: none !important;
+}
+
+/* Mobile: reduce stream chat send button size */
+@media (max-width: 480px) {
+  .str-chat__send-button {
+    min-width: 32px !important;
+    padding: 0 8px !important;
+  }
+}
