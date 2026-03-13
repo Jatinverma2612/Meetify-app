@@ -9,6 +9,18 @@ const LoginPage = () => {
     password: "",
   });
 
+  // This is how we did it at first, without using our custom hook
+  // const queryClient = useQueryClient();
+  // const {
+  //   mutate: loginMutation,
+  //   isPending,
+  //   error,
+  // } = useMutation({
+  //   mutationFn: login,
+  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
+  // });
+
+  // This is how we did it using our custom hook - optimized version
   const { isPending, error, loginMutation } = useLogin();
 
   const handleLogin = (e) => {
@@ -18,48 +30,46 @@ const LoginPage = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 bg-base-100/50"
+      className="min-h-screen flex items-center justify-center p-3 sm:p-6 md:p-8 overflow-y-auto bg-base-100"
       data-theme="forest"
     >
-      <div className="border border-base-300 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-200/40 backdrop-blur-xl rounded-[2rem] shadow-2xl overflow-hidden hover:shadow-primary/5 transition-shadow duration-500">
+      <div className="border border-base-300 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-2xl shadow-xl overflow-hidden my-4">
         {/* LOGIN FORM SECTION */}
-        <div className="w-full lg:w-1/2 p-8 sm:p-12 flex flex-col justify-center">
+        <div className="w-full lg:w-1/2 p-4 sm:p-8 flex flex-col">
           {/* LOGO */}
-          <div className="mb-8 flex items-center justify-start gap-3 hover:opacity-80 transition-opacity w-fit">
-            <div className="p-2.5 bg-primary/10 rounded-2xl">
-              <ShipWheelIcon className="size-8 text-primary" />
-            </div>
-            <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-wider">
+          <div className="mb-4 flex items-center justify-start gap-2">
+            <ShipWheelIcon className="size-9 text-primary" />
+            <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary  tracking-wider">
               Meetify
             </span>
           </div>
 
           {/* ERROR MESSAGE DISPLAY */}
           {error && (
-            <div className="alert alert-error mb-6 rounded-xl text-sm font-medium animate-in fade-in slide-in-from-top-2">
-              <span>{error.response?.data?.message || "An error occurred"}</span>
+            <div className="alert alert-error mb-4">
+              <span>{error.response.data.message}</span>
             </div>
           )}
 
           <div className="w-full">
             <form onSubmit={handleLogin}>
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <div>
-                  <h2 className="text-2xl font-bold tracking-tight">Welcome Back</h2>
-                  <p className="text-base-content/60 mt-2">
+                  <h2 className="text-xl font-semibold">Welcome Back</h2>
+                  <p className="text-sm opacity-70">
                     Sign in to your account to continue your language journey
                   </p>
                 </div>
 
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3">
                   <div className="form-control w-full space-y-2">
-                    <label className="label py-0">
-                      <span className="label-text font-medium ml-1">Email</span>
+                    <label className="label">
+                      <span className="label-text">Email</span>
                     </label>
                     <input
                       type="email"
                       placeholder="hello@example.com"
-                      className="input input-bordered w-full rounded-xl bg-base-100/50 focus:bg-base-100 focus:ring-2 focus:ring-primary/20 transition-all"
+                      className="input input-bordered w-full"
                       value={loginData.email}
                       onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
                       required
@@ -67,27 +77,23 @@ const LoginPage = () => {
                   </div>
 
                   <div className="form-control w-full space-y-2">
-                    <label className="label py-0">
-                      <span className="label-text font-medium ml-1">Password</span>
+                    <label className="label">
+                      <span className="label-text">Password</span>
                     </label>
                     <input
                       type="password"
                       placeholder="••••••••"
-                      className="input input-bordered w-full rounded-xl bg-base-100/50 focus:bg-base-100 focus:ring-2 focus:ring-primary/20 transition-all"
+                      className="input input-bordered w-full"
                       value={loginData.password}
                       onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
                       required
                     />
                   </div>
 
-                  <button 
-                    type="submit" 
-                    className="btn btn-primary w-full rounded-xl mt-2 h-12 text-base shadow-lg hover:shadow-primary/25 hover:scale-[1.02] transition-all duration-300" 
-                    disabled={isPending}
-                  >
+                  <button type="submit" className="btn btn-primary w-full" disabled={isPending}>
                     {isPending ? (
                       <>
-                        <span className="loading loading-spinner loading-sm"></span>
+                        <span className="loading loading-spinner loading-xs"></span>
                         Signing in...
                       </>
                     ) : (
@@ -95,10 +101,10 @@ const LoginPage = () => {
                     )}
                   </button>
 
-                  <div className="text-center mt-6">
-                    <p className="text-base-content/70">
+                  <div className="text-center mt-4">
+                    <p className="text-sm">
                       Don't have an account?{" "}
-                      <Link to="/signup" className="text-primary font-medium hover:underline hover:text-primary-focus transition-colors">
+                      <Link to="/signup" className="text-primary hover:underline">
                         Create one
                       </Link>
                     </p>
@@ -110,18 +116,17 @@ const LoginPage = () => {
         </div>
 
         {/* IMAGE SECTION */}
-        <div className="hidden lg:flex w-full lg:w-1/2 bg-gradient-to-br from-primary/10 via-base-200/50 to-secondary/10 items-center justify-center p-12 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 mix-blend-overlay"></div>
-          <div className="max-w-md w-full relative z-10 flex flex-col items-center">
+        <div className="hidden lg:flex w-full lg:w-1/2 bg-primary/10 items-center justify-center">
+          <div className="max-w-md p-8">
             {/* Illustration */}
-            <div className="relative aspect-square w-full max-w-[320px] mx-auto filter drop-shadow-2xl hover:scale-105 transition-transform duration-700">
-              <img src="/i.png" alt="Language connection illustration" className="w-full h-full object-contain" />
+            <div className="relative aspect-square max-w-sm mx-auto">
+              <img src="/i.png" alt="Language connection illustration" className="w-full h-full" />
             </div>
 
-            <div className="text-center space-y-4 mt-10 bg-base-100/40 backdrop-blur-md p-6 rounded-2xl border border-base-100/50 shadow-xl">
-              <h2 className="text-2xl font-bold tracking-tight text-primary">Connect Globally</h2>
-              <p className="text-base-content/80 font-medium leading-relaxed">
-                Practice conversations, make friends, and improve your language skills with partners worldwide.
+            <div className="text-center space-y-3 mt-6">
+              <h2 className="text-xl font-semibold">Connect with language partners worldwide</h2>
+              <p className="opacity-70">
+                Practice conversations, make friends, and improve your language skills together
               </p>
             </div>
           </div>
