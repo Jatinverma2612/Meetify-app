@@ -104,18 +104,20 @@ const HomePage = () => {
                 return (
                   <div
                     key={user._id}
-                    className="card bg-base-200 hover:shadow-lg transition-all duration-300"
+                    className="card bg-base-100 border border-base-300 hover:border-primary/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                   >
-                    <div className="card-body p-5 space-y-4">
-                      <div className="flex items-center gap-3">
-                        <div className="avatar size-16 rounded-full">
-                          <img src={user.profilePic} alt={user.fullName} />
+                    <div className="card-body p-6 space-y-4">
+                      <div className="flex items-center gap-4">
+                        <div className="avatar size-14 flex-shrink-0">
+                          <div className="rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                            <img src={user.profilePic} alt={user.fullName} className="object-cover" />
+                          </div>
                         </div>
 
-                        <div>
-                          <h3 className="font-semibold text-lg">{user.fullName}</h3>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-bold text-lg truncate group-hover:text-primary transition-colors">{user.fullName}</h3>
                           {user.location && (
-                            <div className="flex items-center text-xs opacity-70 mt-1">
+                            <div className="flex items-center text-xs opacity-70 mt-1 font-medium">
                               <MapPinIcon className="size-3 mr-1" />
                               {user.location}
                             </div>
@@ -124,35 +126,35 @@ const HomePage = () => {
                       </div>
 
                       {/* Languages with flags */}
-                      <div className="flex flex-wrap gap-1.5">
-                        <span className="badge badge-secondary">
+                      <div className="flex flex-col gap-2">
+                        <span className="badge badge-secondary badge-md font-medium w-full justify-start py-3">
                           {getLanguageFlag(user.nativeLanguage)}
                           Native: {capitialize(user.nativeLanguage)}
                         </span>
-                        <span className="badge badge-outline">
+                        <span className="badge badge-outline badge-md font-medium w-full justify-start py-3 shadow-sm">
                           {getLanguageFlag(user.learningLanguage)}
                           Learning: {capitialize(user.learningLanguage)}
                         </span>
                       </div>
 
-                      {user.bio && <p className="text-sm opacity-70">{user.bio}</p>}
+                      {user.bio && <p className="text-sm opacity-80 line-clamp-2 italic">"{user.bio}"</p>}
 
                       {/* Action button */}
                       <button
-                        className={`btn w-full mt-2 ${
-                          hasRequestBeenSent ? "btn-disabled" : "btn-primary"
+                        className={`btn w-full mt-2 transition-all gap-2 ${
+                          hasRequestBeenSent ? "btn-disabled bg-base-300 text-base-content/50" : "btn-primary hover:shadow-md"
                         } `}
                         onClick={() => sendRequestMutation(user._id)}
                         disabled={hasRequestBeenSent || isPending}
                       >
                         {hasRequestBeenSent ? (
                           <>
-                            <CheckCircleIcon className="size-4 mr-2" />
+                            <CheckCircleIcon className="size-4" />
                             Request Sent
                           </>
                         ) : (
                           <>
-                            <UserPlusIcon className="size-4 mr-2" />
+                            <UserPlusIcon className="size-4" />
                             Send Friend Request
                           </>
                         )}

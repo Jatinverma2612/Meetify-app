@@ -13,6 +13,7 @@ import {
   Thread,
   Window,
   useMessageContext,
+  useChatContext,
 } from "stream-chat-react";
 import { StreamChat } from "stream-chat";
 import toast from "react-hot-toast";
@@ -24,6 +25,9 @@ const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY;
 
 const CustomMessage = () => {
   const { message } = useMessageContext();
+  const { client } = useChatContext();
+  
+  const isMe = message.user?.id === client.userID;
   
   // Force links to be clickable
   const renderTextWithLinks = (text) => {
@@ -32,21 +36,26 @@ const CustomMessage = () => {
     const parts = text.split(urlRegex);
     return parts.map((part, i) => {
       if (part.match(urlRegex)) {
-        return <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="underline text-blue-500">{part}</a>;
+        return <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="underline hover:text-primary transition-colors">{part}</a>;
       }
       return part;
     });
   };
 
   return (
-    <div className="str-chat__message-simple border-b border-base-300/10 py-2">
-      <div className="str-chat__message-inner">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="font-bold text-xs">{message.user.name}</span>
-          <span className="text-[10px] opacity-50">
-             {new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          </span>
+    <div className={`chat ${isMe ? "chat-end" : "chat-start"} mb-4 px-4`}>
+      <div className="chat-image avatar">
+        <div className="w-10 rounded-full border border-base-300">
+          <img src={message.user?.image || "https://avatar.iran.liara.run/public"} alt={message.user?.name} />
         </div>
+      </div>
+      <div className="chat-header mb-1 text-xs text-base-content/70 flex items-center gap-1.5">
+        <span className="font-bold">{message.user?.name || "Unknown"}</span>
+        <time className="opacity-75">
+          {message.created_at ? new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
+        </time>
+      </div>
+      <div className={`chat-bubble overflow-hidden ${isMe ? "bg-primary text-primary-content" : "bg-base-200 text-base-content shadow-sm border border-base-300/50"}`}>
         <div className="text-sm">
           {renderTextWithLinks(message.text)}
         </div>

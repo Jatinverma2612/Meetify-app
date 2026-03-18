@@ -36,6 +36,8 @@ const CallPage = () => {
   });
 
   useEffect(() => {
+    let videoClient = null;
+
     const initCall = async () => {
       if (!tokenData?.token || !authUser || !callId) return;
 
@@ -48,7 +50,7 @@ const CallPage = () => {
           image: authUser.profilePic,
         };
 
-        const videoClient = new StreamVideoClient({
+        videoClient = new StreamVideoClient({
           apiKey: STREAM_API_KEY,
           user,
           token: tokenData.token,
@@ -73,11 +75,11 @@ const CallPage = () => {
     initCall();
 
     return () => {
-      if (client) {
-        client.disconnectUser();
+      if (videoClient) {
+        videoClient.disconnectUser();
       }
     };
-  }, [tokenData, authUser, callId, client]);
+  }, [tokenData, authUser, callId]);
 
   if (isLoading || isConnecting) return <PageLoader />;
 
